@@ -1,0 +1,16 @@
+server:
+    port: 5052
+
+
+spring:
+    application:
+        name: CAR-SERVICE
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/carservice?serverTimezone=UTC
+        username: root
+        password: root
+        nitialization-mode: always
+    jpa:
+        hibernate:
+            ddl-auto: update

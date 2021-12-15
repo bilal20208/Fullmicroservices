@@ -1,0 +1,12 @@
+server:
+  port: 5054
+spring:
+  application:
+    name: RegistryServer
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+

@@ -1,0 +1,9 @@
+server:
+    port: 5058
+
+
+
+spring:
+    application:
+        name: RESERVATON
+

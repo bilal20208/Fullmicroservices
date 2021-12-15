@@ -1,0 +1,68 @@
+server:
+  port: 5060
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:5054/eureka
+  instance:
+    hostname: localhost
+
+spring:
+  application:
+    name: API2-GATWAY
+  cloud:
+    gateway:
+      routes:
+        - id: CAR-SERVICE
+          uri: lb://CAR-SERVICE
+          predicates:
+            - Path=/cars/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: CAR-SERVICE
+                fallbackuri: forward:/carServiceFallBack
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-SERVICE
+                fallbackuri: forward:/userReservationsServiceFallBack
+        - id: USER-RESERVATIONS
+          uri: lb://USER-RESERVATIONS
+          predicates:
+            - Path=/user-reservations/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-RESERVATIONS
+                fallbackuri: forward:/userServiceFallBack
+        - id: RESERVATON
+          uri: lb://RESERVATON
+          predicates:
+            - Path=/reservation/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: RESERVATON
+                fallbackuri: forward:/reservationServiceFallBack
+
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 4000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
